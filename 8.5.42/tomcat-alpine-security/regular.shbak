@@ -1,0 +1,24 @@
+#!/bin/sh
+cd /usr/local/tomcat/logs
+current=`date +%s`
+current1=`expr ${current} + 28800`
+days=`expr ${current1} % 86400`
+distance=`expr 86400 - ${days}`
+#sleep 1
+sleep ${distance}
+while true
+do
+mv catalina_.out catalina_`date +%Y-%m-%d`.log
+touch catalina_.out
+find  -mtime +2 -name "catalina_2*.log" | xargs rm -f
+sleep 86400
+#tmp=`ls /usr/local/tomcat/logs/|grep catalina_|awk -F '[-.]' '{print $2}'`
+#for i in ${tmp[@]}
+#do
+#if [ ${i} = `date +%Y%m%d` -o ${i} = `date +%Y%m%d --date="-1 day"` -o ${i} = `date +%Y%m%d --date="-2 day"` -o ${i} = `date +%Y%m%d --date="-3 day"` ]; then
+#echo "reserve!!"
+#else
+#rm -f catalina_${i}.log
+#fi
+#done
+done

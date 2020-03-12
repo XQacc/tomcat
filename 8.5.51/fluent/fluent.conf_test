@@ -1,0 +1,34 @@
+<source>
+  @type tail
+  path {LOGPATH}
+  pos_file /fluentd/catalina.fluent.pos
+  path_key filepath
+  tag tomcat.log
+  format multiline
+  format_firstline /\d{4}-\d{1,2}-\d{1,2}/
+  format1 /(?<message>.*)/
+</source>
+
+
+<filter tomcat.log>
+  @type record_transformer
+  <record>
+    topic {KAFKA_TOPIC}
+    TENANTID {TENANTID}
+    SYS {_SYS}
+    SAPP {_SAPP}
+    SGRP {_SGRP}
+    ITG {_ITG}
+    HOST {HOST}
+  </record>
+</filter>
+
+
+<match tomcat.log>
+ @type stdout
+</match>
+
+<system>
+  # equal to -qq option
+  log_level info 
+</system>
